@@ -29,6 +29,6 @@ jobs:
     - run: npm run build --if-present || true
     - run: git config --global user.email "lang.yonatan@gmail.com"
     - run:  git config --global user.name "Yonatan"
-    - run: git add -A
+    - run: git add ./dist
     - run: git commit -m 'build'
     - run: git push
