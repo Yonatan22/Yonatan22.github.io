@@ -16,7 +16,7 @@ import { Assignment } from '../Interfaces/Assignment'
 
 export default {
   computed: {
-    ...mapState(["currentDate", "page"]),
+    ...mapState(["page", "currentDate"]),
   },
   methods: {
     ...mapMutations(["loadAssignments"]),
