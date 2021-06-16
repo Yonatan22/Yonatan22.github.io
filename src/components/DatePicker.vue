@@ -11,8 +11,8 @@
 </template>
 
 <script lang='ts'>
-import { mapState, mapMutations } from "vuex";
 import { Assignment } from '../Interfaces/Assignment'
+import { mapState, mapMutations } from "vuex";
 
 export default {
   computed: {
