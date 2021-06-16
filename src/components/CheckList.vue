@@ -69,7 +69,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["assignments", "currentDate", "assignmentsPerPage"]),
+    ...mapState(["currentDate", "assignments", "assignmentsPerPage"]),
     pageSize: {
       get(): any {
         return this.assignmentsPerPage;
