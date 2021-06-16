@@ -14,7 +14,7 @@ export default new Vuex.Store({
     assignmentsPerPage: 3,
   },
   mutations: {
-    async loadAssignments(state, { date, page }) {
+    async loadAssignments(state, { date, page }: { date: Date, page: number }) {
       state.page = page;
       state.currentDate = date;
       state.assignments = (

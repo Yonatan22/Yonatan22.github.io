@@ -13,8 +13,8 @@
 </template>
 
 <script lang='ts'>
-import { mapMutations } from "vuex";
 import { Assignment } from '../Interfaces/Assignment';
+import { mapMutations } from "vuex";
 
 export default {
   name: "InputBox",
