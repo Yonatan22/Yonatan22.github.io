@@ -1,5 +1,4 @@
 <template>
-  <nav aria-label="Page navigation example">
     <ul class="pagination pg-blue">
       <li class="page-item" @click="start = Math.max(start - 1, 1)">
         <a class="page-link">Previous</a>
@@ -16,7 +15,6 @@
         <a class="page-link">Next</a>
       </li>
     </ul>
-  </nav>
 </template>
 
 <script>
@@ -39,3 +37,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+ul {
+  width: auto !important;
+}
+</style>

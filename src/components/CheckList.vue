@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <pagination class="col-4"></pagination>
+    <pagination class="" style="display: flex;"></pagination>
     <input type="range" min="1" max="10" step="1" v-model="pageSize" />
     <ul class="object administrator-checkbox-list">
       <assignment-row
