@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import api from "./api";
-import { Assignment } from "./Interfaces/Assignment";
+import { Assignment } from "./models/Assignment";
 
 Vue.use(Vuex);
 
@@ -12,6 +12,7 @@ export default new Vuex.Store({
     currentDate: new Date(),
     page: 0,
     assignmentsPerPage: 3,
+    pageCount: 0,
   },
   mutations: {
     async loadAssignments(state, { date, page }: { date: Date, page: number }) {
@@ -24,6 +25,7 @@ export default new Vuex.Store({
           state.assignmentsPerPage
         )
       ).data;
+      state.pageCount = Math.ceil((await api.getPageCount()).data.count / state.assignmentsPerPage);
       state.noDeadlineAssignments = (await api.getNoDateAssignments()).data;
       state.assignments.push(...state.noDeadlineAssignments);
     },
@@ -40,7 +42,7 @@ export default new Vuex.Store({
     addAssignment(state, assignment: Assignment) {
       state.assignments.push(assignment);
     },
-    markDone({ assignments }: { assignments: Assignment[] }, index: number) {
+    changeDoneStatus({ assignments }: { assignments: Assignment[] }, index: number) {
       assignments[index].isDone = !assignments[index].isDone;
     },
     setDeadline(state, { index, deadline }: { index: number; deadline: Date }) {
@@ -50,8 +52,7 @@ export default new Vuex.Store({
       { assignments }: { assignments: Assignment[] },
       assignmentIndex: number
     ) {
-      assignments[assignmentIndex].isImportant = !assignments[assignmentIndex]
-        .isImportant;
+      assignments[assignmentIndex].isImportant = !assignments[assignmentIndex].isImportant;
       assignments.sort((a: Assignment, b: Assignment) =>
         a.isImportant === b.isImportant ? 0 : a.isImportant ? -1 : 1
       );

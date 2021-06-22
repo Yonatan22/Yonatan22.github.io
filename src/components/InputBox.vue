@@ -5,7 +5,7 @@
       class="btn btn-outline-primary"
       type="button"
       data-mdb-ripple-color="dark"
-      @click="addAssignment(createAssignment())"
+      @click="description && addAssignment(createAssignment())"
     >
       add assignment
     </button>
@@ -14,13 +14,13 @@
 
 <script lang='ts'>
 import { mapMutations } from "vuex";
-import { Assignment } from '../Interfaces/Assignment';
+import { Assignment } from "../models/Assignment";
 
 export default {
   name: "InputBox",
   data() {
     return {
-      description: null,
+      description: undefined,
     };
   },
   methods: {
@@ -29,7 +29,7 @@ export default {
       return {
         description: this.description,
         isImportant: false,
-        deadline: null,
+        deadline: undefined,
         isDone: false,
       };
     },

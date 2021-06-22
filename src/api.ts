@@ -15,7 +15,7 @@ export default {
         params: {
           start,
           count,
-        }
+        },
       }
     );
   },
@@ -23,6 +23,11 @@ export default {
     return axios.put(
       `http://${process.env.VUE_APP_SERVER}/api/assignments`,
       assignments
+    );
+  },
+  getPageCount() {
+    return axios.get(
+      `http://${process.env.VUE_APP_SERVER}/api/assignments/count`
     );
   },
 };

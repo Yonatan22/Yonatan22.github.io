@@ -1,7 +1,17 @@
 <template>
   <div class="row justify-content-center">
-    <pagination class="" style="display: flex;"></pagination>
-    <input type="range" min="1" max="10" step="1" v-model="pageSize" />
+    <pagination class="" style="display: flex"></pagination>
+    <div class="row">
+      <input
+        class="col"
+        type="range"
+        min="1"
+        max="10"
+        step="1"
+        v-model="pageSize"
+      />
+      <input class="col-2" type="number" min="1" max="10" v-model="pageSize" />
+    </div>
     <ul class="object administrator-checkbox-list">
       <assignment-row
         v-for="(assignment, index) in assignments"
@@ -26,14 +36,15 @@ import { mapState, mapMutations } from "vuex";
 import api from "../api";
 import AssignmentRow from "./AssignmentRow.vue";
 import Pagination from "./pagination.vue";
-import { Assignment } from "../Interfaces/Assignment";
-import AssignmentRowVue from './AssignmentRow.vue';
+import { Assignment } from "../models/Assignment";
+import InputBox from "./InputBox.vue";
 
 export default {
   name: "CheckList",
   components: {
     AssignmentRow,
     Pagination,
+    InputBox,
   },
   data() {
     return {
@@ -55,9 +66,9 @@ export default {
         date.getMinutes() === new Date().getMinutes()
       );
     },
-    notify() {
+    notify(this: any) {
       this.assignments.forEach((assignment: Assignment) => {
-        if (this.isDue(new Date(assignment.deadline))) {
+        if (assignment.deadline && this.isDue(new Date(assignment.deadline))) {
           this.$alertify.message(`${assignment.description}`);
         }
       });
@@ -71,7 +82,7 @@ export default {
   computed: {
     ...mapState(["currentDate", "assignments", "assignmentsPerPage"]),
     pageSize: {
-      get(): any {
+      get(): number {
         return this.assignmentsPerPage;
       },
       set(value: number) {
@@ -79,11 +90,13 @@ export default {
       },
     },
   },
-  async created(this: any) {
+  async created() {
+    const millisecondsInMinute = 60000;
+    const millisecondsInSecond = 1000;
     setTimeout(() => {
       this.notify();
-      setInterval(this.notify, 60000);
-    }, (60 - new Date().getSeconds()) * 1000);
+      setInterval(this.notify, millisecondsInMinute);
+    }, (60 - new Date().getSeconds()) * millisecondsInSecond);
     this.setNoDeadlineAssignments((await api.getNoDateAssignments()).data);
   },
 };

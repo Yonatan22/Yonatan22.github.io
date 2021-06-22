@@ -10,7 +10,7 @@
         type="checkbox"
         :checked="assignment.isDone"
         class="form-check-input"
-        @click="markDone(index)"
+        @click="changeDoneStatus(index)"
       />
       <span
         style="display: inline; width: fit-content"
@@ -55,7 +55,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setDeadline", "markDone", "markImportantAssignment"]),
+    ...mapMutations(["setDeadline", "changeDoneStatus", "markImportantAssignment"]),
     getTime(date: Date) {
       return `${date.toISOString().split("T")[0]}T${date
         .toLocaleTimeString(dateFormat)
