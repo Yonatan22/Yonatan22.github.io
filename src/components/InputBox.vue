@@ -29,8 +29,8 @@ export default {
       return {
         description: this.description,
         isImportant: false,
-        deadline: undefined,
         isDone: false,
+        deadline: null,
       };
     },
   },

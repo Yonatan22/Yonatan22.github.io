@@ -15,7 +15,7 @@ export default new Vuex.Store({
     pageCount: 0,
   },
   mutations: {
-    async loadAssignments(state, { date, page }: { date: Date, page: number }) {
+    async loadAssignments(state, { date, page }: { date: Date; page: number }) {
       state.page = page;
       state.currentDate = date;
       state.assignments = (
@@ -25,9 +25,15 @@ export default new Vuex.Store({
           state.assignmentsPerPage
         )
       ).data;
-      state.pageCount = Math.ceil((await api.getPageCount()).data.count / state.assignmentsPerPage);
+      state.pageCount = Math.ceil(
+        (await api.getPageCount()).data.count / state.assignmentsPerPage
+      );
       state.noDeadlineAssignments = (await api.getNoDateAssignments()).data;
       state.assignments.push(...state.noDeadlineAssignments);
+    },
+    async loadDoneAssignments(state) {
+      const res = await api.getDoneAssingments();
+      state.assignments = res.data;
     },
     setNoDeadlineAssignments(state, assignments: Assignment[]) {
       state.noDeadlineAssignments = assignments;
@@ -42,7 +48,10 @@ export default new Vuex.Store({
     addAssignment(state, assignment: Assignment) {
       state.assignments.push(assignment);
     },
-    changeDoneStatus({ assignments }: { assignments: Assignment[] }, index: number) {
+    changeDoneStatus(
+      { assignments }: { assignments: Assignment[] },
+      index: number
+    ) {
       assignments[index].isDone = !assignments[index].isDone;
     },
     setDeadline(state, { index, deadline }: { index: number; deadline: Date }) {
@@ -52,7 +61,8 @@ export default new Vuex.Store({
       { assignments }: { assignments: Assignment[] },
       assignmentIndex: number
     ) {
-      assignments[assignmentIndex].isImportant = !assignments[assignmentIndex].isImportant;
+      assignments[assignmentIndex].isImportant = !assignments[assignmentIndex]
+        .isImportant;
       assignments.sort((a: Assignment, b: Assignment) =>
         a.isImportant === b.isImportant ? 0 : a.isImportant ? -1 : 1
       );

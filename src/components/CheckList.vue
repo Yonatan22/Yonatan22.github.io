@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <pagination class="" style="display: flex"></pagination>
+    <pagination v-if="pageCount" style="display: flex"></pagination>
     <div class="row">
       <input
         class="col"
@@ -57,6 +57,7 @@ export default {
       "markImportantAssignment",
       "markDone",
       "setDeadline",
+      "loadAssignments",
       "setNoDeadlineAssignments",
     ]),
     isDue(date: Date): boolean {
@@ -74,13 +75,22 @@ export default {
       });
     },
     async save() {
-      this.assignments.forEach(async (assignment: Assignment) => {
-        await api.postAssignments(assignment);
-      });
+      await Promise.all(
+        this.assignments.map((assignment: Assignment) =>
+          api.postAssignments(assignment)
+        )
+      );
+      this.loadAssignments({ date: this.currentDate, page: this.page });
     },
   },
   computed: {
-    ...mapState(["currentDate", "assignments", "assignmentsPerPage"]),
+    ...mapState([
+      "currentDate",
+      "assignments",
+      "assignmentsPerPage",
+      "page",
+      "pageCount",
+    ]),
     pageSize: {
       get(): number {
         return this.assignmentsPerPage;
@@ -97,7 +107,8 @@ export default {
       this.notify();
       setInterval(this.notify, millisecondsInMinute);
     }, (60 - new Date().getSeconds()) * millisecondsInSecond);
-    this.setNoDeadlineAssignments((await api.getNoDateAssignments()).data);
+    const { data } = await api.getNoDateAssignments();
+    this.setNoDeadlineAssignments(data);
   },
 };
 </script>

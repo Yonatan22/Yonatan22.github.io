@@ -1,17 +1,18 @@
 <template>
   <ul class="pagination pg-blue" v-if="pageCount">
-    <li class="page-item" @click="startIndex--">
+    <li class="page-item" @click="pageIndex--">
       <a class="page-link">Previous</a>
     </li>
     <li
       class="page-item"
-      v-for="page in pages"
-      :key="page"
-      @click="loadAssignments({ date: currentDate, page: page - 1 })"
+      :class="[pageSlot === page && 'active']"
+      v-for="pageSlot in pages"
+      :key="pageSlot"
+      @click="pageIndex = pageSlot"
     >
-      <a class="page-link">{{ page }}</a>
+      <a class="page-link">{{ pageSlot + 1 }}</a>
     </li>
-    <li class="page-item" @click="startIndex++">
+    <li class="page-item" @click="pageIndex++">
       <a class="page-link">Next</a>
     </li>
   </ul>
@@ -20,33 +21,26 @@
 <script>
 import { mapMutations, mapState } from "vuex";
 
-const navMaxLength = 3;
-
 export default {
-  data() {
-    return {
-      start: 1,
-    };
-  },
   computed: {
-    ...mapState(["currentDate", "pageCount"]),
+    ...mapState(["currentDate", "pageCount", "page"]),
     pages() {
-      return [...new Array(Math.min(this.pageCount, navMaxLength))].map((x, i) => i + this.start);
+      return [...new Array(this.pageCount).keys()];
     },
-    startIndex: {
+    pageIndex: {
       get() {
-        return this.start;
+        return this.page;
       },
-      set(value) {
-        this.start = Math.min(
-          Math.max(1, this.pageCount - navMaxLength + 1),
-          Math.max(1, value)
-        );
+      set(page) {
+        this.loadAssignments({
+          date: this.currentDate,
+          page: Math.min(this.pageCount - 1, Math.max(0, page)),
+        });
       },
     },
   },
   methods: {
-    ...mapMutations(["setPage", "loadAssignments"]),
+    ...mapMutations(["loadAssignments"]),
   },
 };
 </script>

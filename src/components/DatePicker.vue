@@ -1,10 +1,10 @@
 <template>
   <div class="row mt-2">
     <div class="col-4">
-      <input
+      <date-picker
+        v-model="deadline"
         type="date"
-        class="form-control"
-        @input="loadAssignments({date: new Date($event.target.value), page})"
+        @input="deadline && loadAssignments({ date: deadline, page })"
       />
     </div>
   </div>
@@ -12,8 +12,16 @@
 
 <script lang='ts'>
 import { mapState, mapMutations } from "vuex";
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 
 export default {
+  components: { DatePicker },
+  data() {
+    return {
+      deadline: null,
+    };
+  },
   computed: {
     ...mapState(["page", "currentDate"]),
   },

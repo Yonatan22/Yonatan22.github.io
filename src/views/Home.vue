@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <date-picker msg="Welcome to Your Vue.js + TypeScript App"/>
+    <date-picker/>
     <input-box/>
     <check-list/>
   </div>

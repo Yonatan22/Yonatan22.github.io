@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Assignment } from "./models/Assignment";
 
 export default {
   getNoDateAssignments() {
@@ -19,10 +20,15 @@ export default {
       }
     );
   },
-  postAssignments(assignments: any) {
+  getDoneAssingments() {
+    return axios.get(
+      `http://${process.env.VUE_APP_SERVER}/api/assignments/done`
+    );
+  },
+  postAssignments(assignment: Assignment) {
     return axios.put(
       `http://${process.env.VUE_APP_SERVER}/api/assignments`,
-      assignments
+      assignment
     );
   },
   getPageCount() {

@@ -22,29 +22,26 @@
       >
     </div>
     <div class="col-4">
-      <input
-        class="form-control"
-        type="datetime-local"
-        :value="
-          assignment.deadline ? getTime(new Date(assignment.deadline)) : ''
-        "
+      <date-picker
+        v-model="deadline"
+        type="datetime"
         @input="
           setDeadline({
             index,
-            deadline: new Date($event.target.value),
+            deadline,
           })
         "
       />
     </div>
   </div>
 </template>
-
 <script lang='ts'>
 import { mapMutations } from "vuex";
-
-const dateFormat = 'en-GB';
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 
 export default {
+  components: { DatePicker },
   name: "AssignmentRow",
   props: ["assignment", "index"],
   data() {
@@ -54,13 +51,17 @@ export default {
       },
     };
   },
-  methods: {
-    ...mapMutations(["setDeadline", "changeDoneStatus", "markImportantAssignment"]),
-    getTime(date: Date) {
-      return `${date.toISOString().split("T")[0]}T${date
-        .toLocaleTimeString(dateFormat)
-        .slice(0, 5)}`;
+  computed: {
+    deadline(): Date {
+      return this.assignment.deadline && new Date(this.assignment.deadline);
     },
+  },
+  methods: {
+    ...mapMutations([
+      "setDeadline",
+      "changeDoneStatus",
+      "markImportantAssignment",
+    ]),
   },
 };
 </script>

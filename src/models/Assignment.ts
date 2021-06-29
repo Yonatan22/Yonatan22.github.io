@@ -2,5 +2,5 @@ export interface Assignment {
     isImportant: boolean,
     isDone: boolean,
     description?: string,
-    deadline?: Date,
+    deadline: Date | null,
 }
